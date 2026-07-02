@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CORE MAP — Sua Amostra Gratuita</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --c: #1a6b5a; --c-light: #e8f4f1;
+    --o: #b8860b; --o-light: #faf4e6;
+    --r: #1a3a6b; --r-light: #e8eef5;
+    --e: #2d6b2d; --e-light: #ecf4ec;
+    --bg: #f8f6f0;
+    --surface: #ffffff;
+    --text: #1a1a1a;
+    --text-muted: #4a4a4a;
+    --border: #e8e4da;
+    --radius: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif; font-weight: 400;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  .header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 20px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .logo {
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+  }
+
+  .logo span { color: var(--profile-color, #1a6b5a); font-weight: 600; }
+
+  .tag-gratis {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 500;
+    color: var(--profile-color, #1a6b5a);
+    background: var(--profile-light, #e8f4f1);
+    padding: 5px 12px;
+    border-radius: 20px;
+  }
+
+  .page { max-width: 720px; margin: 0 auto; padding: 40px 24px 80px; }
+
+  .greeting { margin-bottom: 28px; }
+
+  .greeting p.eyebrow {
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  .greeting h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1.3;
+    margin-bottom: 8px;
+  }
+
+  .greeting h1 span { color: var(--profile-color, #1a6b5a); }
+
+  .greeting p.sub {
+    color: var(--text-muted);
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.6;
+  }
+
+  /* MINI CHART TEASER */
+  .chart-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 28px;
+  }
+
+  .chart-title {
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 22px;
+    font-weight: 500;
+  }
+
+  .profiles-grid { display: grid; gap: 14px; }
+
+  .profile-bar-item { display: flex; flex-direction: column; gap: 6px; }
+
+  .profile-bar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+
+  .profile-bar-label {
+    font-size: 13px;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .profile-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+
+  .profile-bar-score {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .profile-bar-score.locked { font-size: 13px; font-family: 'DM Sans', sans-serif; color: var(--text-muted); font-weight: 400; }
+
+  .profile-bar-track { height: 6px; background: var(--border); border-radius: 3px; overflow: hidden; }
+
+  .profile-bar-fill { height: 100%; border-radius: 3px; transition: width 1.2s cubic-bezier(0.4,0,0.2,1); width: 0; }
+
+  .profile-bar-fill.locked-fill { background: repeating-linear-gradient(45deg, #e0dccf, #e0dccf 4px, #ebe7db 4px, #ebe7db 8px) !important; }
+
+  .badge-dominante {
+    font-size: 10px;
+    background: var(--profile-light, #e8f4f1);
+    color: var(--profile-color, #1a6b5a);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+  }
+
+  /* SECTION TITLES */
+  .section-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 21px;
+    font-weight: 400;
+    margin-bottom: 6px;
+  }
+
+  .section-subtitle {
+    color: var(--text-muted);
+    font-size: 14px;
+    font-weight: 400;
+    margin-bottom: 20px;
+    line-height: 1.6;
+  }
+
+  /* PERFIL CARD */
+  .perfil-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 28px;
+    margin-bottom: 24px;
+  }
+
+  .perfil-rank {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--profile-color, #1a6b5a);
+    margin-bottom: 6px;
+    font-weight: 500;
+  }
+
+  .perfil-nome {
+    font-family: 'Playfair Display', serif;
+    font-size: 26px;
+    font-weight: 600;
+    color: var(--profile-color, #1a6b5a);
+    margin-bottom: 4px;
+  }
+
+  .perfil-arquetipo {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 18px;
+  }
+
+  .perfil-abertura {
+    font-size: 15px;
+    line-height: 1.8;
+    color: var(--text);
+    margin-bottom: 4px;
+  }
+
+  /* ESTRATÉGIA (mesmo padrão do laudo completo) */
+  .estrategia-wrap {
+    background: var(--bg);
+    border-radius: 12px;
+    padding: 22px 24px;
+    margin-top: 4px;
+  }
+
+  .estrategia-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--profile-color, #1a6b5a);
+    font-weight: 500;
+    margin-bottom: 8px;
+  }
+
+  .estrategia-title {
+    font-size: 16px;
+    font-weight: 500;
+    margin-bottom: 10px;
+    font-family: 'Playfair Display', serif;
+  }
+
+  .estrategia-section {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin: 14px 0 5px;
+  }
+
+  .estrategia-desc {
+    font-size: 14px;
+    color: var(--text);
+    line-height: 1.7;
+    font-weight: 400;
+  }
+
+  .estrategia-lista { list-style: none; padding: 0; margin-bottom: 4px; }
+
+  .estrategia-lista li {
+    font-size: 14px; line-height: 1.8; color: var(--text); font-weight: 400;
+    padding-left: 16px; position: relative; margin-bottom: 2px;
+  }
+
+  .estrategia-lista li::before { content: "→"; position: absolute; left: 0; color: var(--profile-color, #1a6b5a); }
+
+  .campo-batalha {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: var(--text);
+    line-height: 1.6;
+  }
+
+  /* FANTASMA TEASER (bloqueado) */
+  .fantasma-teaser {
+    position: relative;
+    background: var(--surface);
+    border: 1px dashed var(--border);
+    border-radius: var(--radius);
+    padding: 26px 28px;
+    margin-bottom: 24px;
+    overflow: hidden;
+  }
+
+  .fantasma-teaser-label {
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    font-weight: 500;
+    margin-bottom: 10px;
+  }
+
+  .fantasma-teaser-ego {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 19px;
+    line-height: 1.5;
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  .fantasma-teaser-hint {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .fantasma-teaser-hint strong { color: var(--text); font-weight: 500; }
+
+  .lock-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--border);
+  }
+
+  .lock-icon {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    flex-shrink: 0;
+  }
+
+  .lock-text { font-size: 12px; color: var(--text-muted); }
+
+  /* FECHAMENTO / CTA */
+  .fechamento {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    text-align: left;
+    margin-top: 8px;
+  }
+
+  .fechamento-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    font-weight: 400;
+    margin-bottom: 14px;
+    line-height: 1.4;
+  }
+
+  .fechamento-title span { color: var(--profile-color, #1a6b5a); }
+
+  .fechamento-text {
+    font-size: 14.5px;
+    line-height: 1.8;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  .dev-preview {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 22px;
+    flex-wrap: wrap;
+  }
+
+  .dev-chip {
+    font-size: 12px;
+    padding: 6px 12px;
+    border-radius: 20px;
+    background: var(--bg);
+    color: var(--text-muted);
+    border: 1px solid var(--border);
+  }
+
+  .price-row {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+
+  .price-value {
+    font-family: 'Playfair Display', serif;
+    font-size: 30px;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .price-label { font-size: 13px; color: var(--text-muted); }
+
+  .cta-btn {
+    display: block;
+    width: 100%;
+    text-align: center;
+    background: var(--profile-color, #1a6b5a);
+    color: #ffffff;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    padding: 17px 24px;
+    border-radius: 12px;
+    text-decoration: none;
+    transition: opacity 0.2s;
+  }
+
+  .cta-btn:hover { opacity: 0.9; }
+
+  .cta-sub {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 12px;
+  }
+
+  .footer-note {
+    text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin-top: 36px;
+    line-height: 1.7;
+  }
+
+  @media (max-width: 640px) {
+    .header { padding: 14px 16px; }
+    .page { padding: 24px 16px 60px; }
+    .greeting h1 { font-size: 24px; }
+    .perfil-nome { font-size: 22px; }
+    .perfil-card, .fantasma-teaser, .fechamento { padding: 20px; }
+    .estrategia-wrap { padding: 18px; }
+    .fechamento-title { font-size: 19px; }
+    .price-value { font-size: 26px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="logo">Executiva<span>Mentes</span> · CORE MAP</div>
+  <div class="tag-gratis">amostra gratuita</div>
+</div>
+
+<div class="page">
+
+  <div class="greeting">
+    <p class="eyebrow">Seu resultado está pronto</p>
+    <h1>Olá, <span id="userName">Liderança</span> 👋</h1>
+    <p class="sub">Você acabou de revelar seu perfil predominante de liderança. Isso é só o começo do que o CORE MAP tem pra te mostrar.</p>
+  </div>
+
+  <div class="chart-card">
+    <div class="chart-title">Seus 4 perfis · pontuação total</div>
+    <div class="profiles-grid" id="profilesGrid"></div>
+  </div>
+
+  <div style="margin-bottom: 14px;">
+    <div class="section-title">Como você lidera hoje</div>
+    <div class="section-subtitle">Este é o seu perfil predominante — a força que mais aparece na sua liderança.</div>
+  </div>
+
+  <div class="perfil-card">
+    <div class="perfil-rank" id="perfilRank"></div>
+    <div class="perfil-nome" id="perfilNome"></div>
+    <div class="perfil-arquetipo" id="perfilArquetipo"></div>
+    <div class="perfil-abertura" id="perfilAbertura"></div>
+
+    <div class="estrategia-wrap">
+      <div class="estrategia-label">Um movimento de desenvolvimento do seu perfil</div>
+      <div class="estrategia-title" id="estTitulo"></div>
+      <div class="estrategia-section">O que acontece</div>
+      <div class="estrategia-desc" id="estOq"></div>
+      <div class="estrategia-section">O que aplicar</div>
+      <ul class="estrategia-lista" id="estAp"></ul>
+      <div class="campo-batalha">📌 No campo de batalha: <span id="estBatalha"></span></div>
+    </div>
+  </div>
+
+  <div class="fantasma-teaser">
+    <div class="fantasma-teaser-label">🎭 um dos 3 fantasmas do seu perfil</div>
+    <div class="fantasma-teaser-ego" id="fantasmaEgo"></div>
+    <div class="fantasma-teaser-hint">Essa frase passa pela sua cabeça com mais frequência do que você imagina. <strong>Ela tem nome, tem origem — e tem estratégia própria.</strong></div>
+    <div class="lock-row">
+      <div class="lock-icon">🔒</div>
+      <div class="lock-text">Cenário completo, impacto e o que esse fantasma esconde estão no laudo completo</div>
+    </div>
+  </div>
+
+  <div class="fechamento">
+    <div class="fechamento-title">Você acabou de aplicar <span>um</span> dos movimentos do seu perfil. Os outros estão te esperando no <span>laudo completo</span>.</div>
+    <div class="fechamento-text">
+      O laudo completo do CORE MAP traz os 3 fantasmas do seu perfil predominante — cenário, impacto e o que cada um esconde — além das estratégias completas para destravar sua potência. E mais: mostra onde você trava nos seus dois perfis com menor pontuação, os pontos que você minimiza porque não são a sua força natural.
+    </div>
+    <div class="dev-preview">
+      <div class="dev-chip">🎭 3 fantasmas do seu perfil</div>
+      <div class="dev-chip">🧭 estratégias completas</div>
+      <div class="dev-chip">🔍 vulnerabilidades dos outros 2 perfis</div>
+    </div>
+    <div class="price-row">
+      <div class="price-value">R$ 47</div>
+      <div class="price-label">acesso único, sem assinatura</div>
+    </div>
+    <a class="cta-btn" href="https://go.hotmart.com/F106136093R" target="_blank" rel="noopener">Quero meu laudo completo</a>
+    <p class="cta-sub">Você pode continuar se reconhecendo em fragmentos — ou mapear isso hoje.</p>
+  </div>
+
+  <p class="footer-note">CORE MAP · Denize Piontkieviscz &amp; Roberta Campos<br>Mais de 3 décadas de vivência em desenvolvimento humano</p>
+
+</div>
+
+<script>
+const PERFIS = {
+  C: {
+    nome: "Controle", subtitulo: "A força que lidera com o próprio pulso",
+    arquetipo: "Vigilante", mestre: "Coragem", cor: "#1a6b5a", corLight: "#e8f4f1",
+    abertura: `Você age enquanto os outros ainda estão pensando. Enxerga o que precisa ser feito, e faz. Enquanto o mundo gira no caos, você organiza, executa e entrega — com presença, com ritmo, com coragem.<br><br>E é exatamente por isso que, sem perceber, você começa a carregar tudo. Assume, resolve, antecipa, entrega — e a equipe desacelera, porque você ensinou que sempre dá conta, mesmo sobrecarregado.`,
+    estrategia: {
+      titulo: "Quando você começa a carregar tudo...",
+      oq: "Você assume, resolve, antecipa, entrega. E sem perceber, a equipe desacelera. Porque você ensinou que dá conta — mesmo sobrecarregado.",
+      ap: ["Delimite sua zona de ação e distribua o resto.", "Delegue com briefing claro, prazo e critério de sucesso.", "Aceite que o time só cresce quando você abre espaço."],
+      batalha: "Precisa montar uma apresentação importante? Divida em três partes: dados, narrativa e design. Distribua. Acompanhe só os pontos críticos. Você foca no que só você pode fazer."
+    },
+    fantasmaEgo: "Se eu mostrar que não sei, não irão me respeitar mais."
+  },
+  O: {
+    nome: "Ordem", subtitulo: "A mente que estrutura o impossível",
+    arquetipo: "Estrategista", mestre: "Visão", cor: "#b8860b", corLight: "#faf4e6",
+    abertura: `Você organiza o invisível. Sua mente enxerga com nitidez o que precisa ser feito, estrutura o caminho, conecta os pontos, traduz o caos em clareza. Onde há ruído, você percebe padrões.<br><br>E é essa mesma busca por acerto que faz você revisar tudo três vezes — enquanto o cenário muda, e o plano perfeito nasce defasado. A decisão que parecia prudente agora soa lenta.`,
+    estrategia: {
+      titulo: "Quando você espera demais por segurança... e perde o timing.",
+      oq: "Você quer acertar. E por isso revê tudo 3 vezes. Mas o cenário muda — e o plano perfeito já nasce defasado. A decisão que parecia prudente, agora soa lenta.",
+      ap: ["Use a Regra 70/30: avance com 70% de dados, corrija com 30% no caminho.", "Teste, mensure, ajuste — mas em movimento."],
+      batalha: "Está para lançar um plano de incentivo comercial? Aplique: «Vamos lançar com o básico — e revisar a cada semana conforme os resultados.» Mais ação, menos espera. Resultado com evolução."
+    },
+    fantasmaEgo: "Se não estiver impecável, é melhor não apresentar."
+  },
+  R: {
+    nome: "Relacionamento", subtitulo: "O coração que sustenta conexões",
+    arquetipo: "Embaixador", mestre: "Empatia", cor: "#1a3a6b", corLight: "#e8eef5",
+    abertura: `Você transforma laços em alianças verdadeiras. Onde outros veem distância, você constrói pontes. Sua sensibilidade é radar: percebe o clima, lê o não dito, e age com delicadeza onde outros passariam direto.<br><br>E é essa mesma vontade de incluir todo mundo que adia suas decisões. Você espera o feedback de cada pessoa, busca alinhar cada ponto — e o tempo passa. A equipe começa a se frustrar. O que era empatia vira inércia.`,
+    estrategia: {
+      titulo: "Quando o excesso de escuta adia a decisão...",
+      oq: "Você quer garantir que todos estejam incluídos. Espera o feedback de cada pessoa, ouve todas as perspectivas, busca alinhar cada ponto... Mas, ao tentar agradar e unir, o tempo passa. A decisão não vem. A equipe começa a se frustrar.",
+      ap: ["Defina 3 critérios objetivos antes de ouvir o grupo.", "Escute, mas mantenha um prazo-limite.", "Decida e comunique com clareza, explicando o porquê."],
+      batalha: "Precisa escolher entre duas propostas de campanha comercial para o time? Em vez de esperar o consenso perfeito, diga: «Avaliei três pontos-chave: alinhamento com a meta, custo e prazo de execução. Vamos com a Campanha X. Agradeço cada contribuição — ela ajudou a construir essa escolha.» Você honra a escuta, mas assume o papel de líder."
+    },
+    fantasmaEgo: "Se eu me meter nisso, o conflito pode virar contra mim. Não quero ser o vilão."
+  },
+  E: {
+    nome: "Equilíbrio", subtitulo: "A alma que sente o que muitos não percebem",
+    arquetipo: "Harmonizador", mestre: "Serenidade", cor: "#2d6b2d", corLight: "#ecf4ec",
+    abertura: `Você percebe tensões antes que se tornem crises, escuta o que não é dito, acolhe com presença. Onde há ruído, você oferece silêncio. Sua liderança nasce do cuidado.<br><br>E é esse mesmo cuidado que te faz desviar de um elogio: "Ah, foi o time. Só dei um apoio." Só que, no silêncio, sua liderança também deixa de ser vista — e começa a doer ver outros ocupando espaços que você ajudou a construir.`,
+    estrategia: {
+      titulo: "Quando você se apaga para não incomodar...",
+      oq: "Você quer que o resultado fale por si — e ele fala. Mas ninguém ouve. Porque no mundo real, quem não se mostra, não é lembrado. Você não quer parecer arrogante, evita se autopromover, prefere não «disputar palco».",
+      ap: ["Comece a separar visibilidade de vaidade. Posicionamento é sobre clareza, não ego.", "Quando a entrega for sua, não terceirize a apresentação.", "Use frases simples e assertivas para marcar presença: «Essa parte fui eu que desenvolvi junto ao time. Posso apresentar?»"],
+      batalha: "Você recebe um elogio da diretoria por um relatório que passou três noites refinando. Em vez de desviar, diga: «Agradeço. Eu cuidei da análise e estrutura dos dados. O resultado é coletivo, mas essa parte foi comigo.» Isso não é autopromoção — é maturidade para ocupar o lugar que você construiu."
+    },
+    fantasmaEgo: "Se eu aceitar o elogio, vão esperar mais ainda — e se eu falhar depois?"
+  }
+};
+
+const params = new URLSearchParams(location.search);
+const scores = {
+  C: parseInt(params.get('C') || 72),
+  O: parseInt(params.get('O') || 58),
+  R: parseInt(params.get('R') || 45),
+  E: parseInt(params.get('E') || 25)
+};
+const userName = params.get('nome') || 'Líder';
+document.getElementById('userName').textContent = userName;
+
+const sorted = Object.entries(scores).sort((a,b) => b[1]-a[1]);
+const [topKey, topVal] = sorted[0];
+const topProfile = PERFIS[topKey];
+
+document.documentElement.style.setProperty('--profile-color', topProfile.cor);
+document.documentElement.style.setProperty('--profile-light', topProfile.corLight);
+
+// Chart: só o dominante mostra valor real, os outros ficam bloqueados
+const grid = document.getElementById('profilesGrid');
+sorted.forEach(([key, val], idx) => {
+  const p = PERFIS[key];
+  const isTop = idx === 0;
+  grid.innerHTML += `
+    <div class="profile-bar-item">
+      <div class="profile-bar-header">
+        <div class="profile-bar-label">
+          <span class="profile-dot" style="background:${isTop ? p.cor : '#c9c4b5'}"></span>
+          ${p.nome}
+          ${isTop ? '<span class="badge-dominante">predominante</span>' : ''}
+        </div>
+        <div class="profile-bar-score ${isTop ? '' : 'locked'}" style="${isTop ? 'color:'+p.cor : ''}">${isTop ? val : '🔒'}</div>
+      </div>
+      <div class="profile-bar-track">
+        <div class="profile-bar-fill ${isTop ? '' : 'locked-fill'}" data-width="${isTop ? val : 100}" style="${isTop ? 'background:'+p.cor : ''}; width:0%"></div>
+      </div>
+    </div>
+  `;
+});
+setTimeout(() => {
+  document.querySelectorAll('.profile-bar-fill').forEach(el => { el.style.width = el.dataset.width + '%'; });
+}, 200);
+
+// Perfil card
+document.getElementById('perfilRank').textContent = `Seu perfil predominante · ${topVal} pontos`;
+document.getElementById('perfilNome').textContent = topProfile.nome;
+document.getElementById('perfilArquetipo').textContent = `Arquétipo: ${topProfile.arquetipo} · Lado Mestre: ${topProfile.mestre}`;
+document.getElementById('perfilAbertura').innerHTML = topProfile.abertura;
+
+// Estratégia
+document.getElementById('estTitulo').textContent = topProfile.estrategia.titulo;
+document.getElementById('estOq').textContent = topProfile.estrategia.oq;
+const apList = document.getElementById('estAp');
+topProfile.estrategia.ap.forEach(a => { apList.innerHTML += `<li>${a}</li>`; });
+document.getElementById('estBatalha').textContent = topProfile.estrategia.batalha;
+
+// Fantasma teaser
+document.getElementById('fantasmaEgo').textContent = `"${topProfile.fantasmaEgo}"`;
+</script>
+</body>
+</html>
