@@ -31,7 +31,7 @@ function enviarLaudoPorEmail(email, nome, perfil) {
         E: scores.E,
         nome: nome || 'Lider'
       });
-      window.location.href = pilula-core-map.html + params.toString();
+     window.location.href = 'mapa-núcleo-pilula (1).html?' + params.toString();
       resolve({ sucesso: true });
     });
   });
