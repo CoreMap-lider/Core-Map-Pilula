@@ -31,7 +31,12 @@ function enviarLaudoPorEmail(email, nome, perfil) {
         E: scores.E,
         nome: nome || 'Lider'
       });
-    window.location.href = 'pilula-v3.html?' + params.toString();
+      try {
+        localStorage.setItem('coremap_scores', JSON.stringify({
+          C: scores.C, O: scores.O, R: scores.R, E: scores.E, nome: nome || 'Lider'
+        }));
+      } catch(e) {}
+      window.location.href = 'pilula-v3.html?' + params.toString();
       resolve({ sucesso: true });
     });
   });
